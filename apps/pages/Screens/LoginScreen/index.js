@@ -24,8 +24,6 @@ const LoginScreenPage = ({ navigation }) => {
     const [password, setPassword] = React.useState({ value: '', error: '' })
     const [Loading, setLoading] = React.useState(false);
 
-    console.log("passs", password?.value, email?.value)
-
     const LoginWithDriver = async () => {
         const emailError = emailValidator(email.value);
         const passwordError = passwordValidator(password.value);
@@ -50,13 +48,10 @@ const LoginScreenPage = ({ navigation }) => {
             },
             json: true
         };
-        console.log("authOptions", authOptions);
         axios(authOptions)
             .then((response) => {
-                console.log("response", JSON.stringify(response));
                 if (response?.data?.status === true) {
                     setLoading(false);
-                    console.log(response);
                     showMessage({
                         message: response?.data?.message,
                         description: response?.data?.user + ' ' + response?.data?.message,
@@ -65,7 +60,6 @@ const LoginScreenPage = ({ navigation }) => {
                     });
                 } else {
                     setLoading(false);
-                    console.log(response.data);
                     showMessage({
                         message: response?.data?.message,
                         description: response?.data?.message,
