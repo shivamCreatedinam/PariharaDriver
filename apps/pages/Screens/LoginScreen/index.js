@@ -16,12 +16,15 @@ import TextInput from '../../components/TextInput';
 import { emailValidator } from '../../helpers/emailValidator';
 import { passwordValidator } from '../../helpers/passwordValidator';
 import globle from '../../globle/globle';
+import { showMessage } from "react-native-flash-message";
 
 const LoginScreenPage = ({ navigation }) => {
 
     const [email, setEmail] = React.useState({ value: '', error: '' })
     const [password, setPassword] = React.useState({ value: '', error: '' })
     const [Loading, setLoading] = React.useState(false);
+
+    console.log("passs", password?.value, email?.value)
 
     const LoginWithDriver = async () => {
         const emailError = emailValidator(email.value);
@@ -40,22 +43,35 @@ const LoginScreenPage = ({ navigation }) => {
         var authOptions = {
             method: 'POST',
             url: globle.API_BASE_URL + 'delivery-boy-login',
-            data: JSON.stringify({ "email": email, "password": password }),
+            // data: JSON.stringify({ "email": email, "password": password }),
+            data: { "email": email.value, "password": password?.value },
             headers: {
                 'Content-Type': 'application/json'
             },
             json: true
         };
-        console.log(authOptions);
+        console.log("authOptions", authOptions);
         axios(authOptions)
             .then((response) => {
-                console.log(JSON.stringify(response));
-                if (response?.status) {
+                console.log("response", JSON.stringify(response));
+                if (response?.data?.status === true) {
                     setLoading(false);
                     console.log(response);
+                    showMessage({
+                        message: response?.data?.message,
+                        description: response?.data?.user + ' ' + response?.data?.message,
+                        type: "success",
+                        animationDuration:100
+                    });
                 } else {
                     setLoading(false);
                     console.log(response.data);
+                    showMessage({
+                        message: response?.data?.message,
+                        description: response?.data?.message,
+                        type: "danger",
+                        animationDuration:100
+                    });
                 }
             })
             .catch((error) => {

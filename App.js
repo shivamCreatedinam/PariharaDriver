@@ -12,6 +12,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import NavigationApp from './apps/navigation/'
+import FlashMessage from "react-native-flash-message";
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
         barStyle={"dark-content"}
       />
       <NavigationApp />
+      <FlashMessage position="top" />
     </View>
   );
 }
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
   },
   backgroundStyle: {
     flex: 1,
-    backgroundColor:'red'
+    backgroundColor: 'red'
   }
 });
 
