@@ -15,14 +15,19 @@ import Header from '../../components/Header';
 import TextInput from '../../components/TextInput';
 import { emailValidator } from '../../helpers/emailValidator';
 import { passwordValidator } from '../../helpers/passwordValidator';
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import globle from '../../globle/globle';
 import { showMessage } from "react-native-flash-message";
+import { useSelector } from 'react-redux';
 
 const LoginScreenPage = ({ navigation }) => {
 
     const [email, setEmail] = React.useState({ value: '', error: '' })
     const [password, setPassword] = React.useState({ value: '', error: '' })
     const [Loading, setLoading] = React.useState(false);
+    const isSignedIn = useSelector(state => state.userData?.isSingedIn);
+
+    console.log(isSignedIn);
 
     const LoginWithDriver = async () => {
         const emailError = emailValidator(email.value);
@@ -56,15 +61,16 @@ const LoginScreenPage = ({ navigation }) => {
                         message: response?.data?.message,
                         description: response?.data?.user + ' ' + response?.data?.message,
                         type: "success",
-                        animationDuration:100
+                        animationDuration: 100
                     });
+                    navigation.navigate('FirstPage');
                 } else {
                     setLoading(false);
                     showMessage({
                         message: response?.data?.message,
                         description: response?.data?.message,
                         type: "danger",
-                        animationDuration:100
+                        animationDuration: 100
                     });
                 }
             })
@@ -78,7 +84,7 @@ const LoginScreenPage = ({ navigation }) => {
             <View style={{ flex: 1, padding: 16, alignItems: 'center' }}>
                 <View style={{ marginTop: Dimensions.get('screen').width / 2.5 }}>
                     <Logo />
-                    <Header>Welcome back.</Header>
+                    <Header>Welcome back. {isSignedIn ? 'Yes' : 'No'}</Header>
                 </View>
                 <TextInput
                     label="Email"
